@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce</title>
+    <!--This link is the boostrap stylesheet-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body style="background-color:azure">
+
+    <!--NAViGATOR-->
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">   
+            <a class="navbar-brand text-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxyfWdDKebepA036T3mK56D3Zj3EQqhGloog&usqp=CAU" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                E-commerce product list
+            </a>
+        </div>
+    </nav>
+
+        <!--main div allows us to place all the DOM inside it,
+            the class container aligns all "DIVS" or other tags to center
+        -->
+    <div class="container">
+
+        <!--APPLICATION
+            Row class makes that all tags inside being organized horizontally
+        -->
+        <div id="application" class="row pt-5">
+            
+            <!--FORM DIV, 
+                col-md-4 defines the size and number of columns this div will occupy,
+                Breakpoints
+                "empty" = none
+                "sm" = small;
+                "md" = medium;
+                "lg" = large;
+                "xl" = extra large;
+                "xxl" = extra extra large;
+            -->
+            <div class="col-md-4"> 
+                <!--class "card" allows us to create a dashboard, it is useful to improve the design, 
+                    for instance you can provide a different background, border, etc.
+                    card class is composed by header, body and others
+                -->
+                <div class="card">
+                    <!--card header-->
+                    <div class="card-header">
+                        <h5 class="text-md-center">Add new product</h5>
+                    </div>
+                    <!--form body-->
+                    <form id="productForm" class="card-body">
+                        <!--The class "form-label" allows to put an empty space among DIVS-->
+                        <div class="form-label">
+                            <input type="text" id="name" placeholder="Product name" class="form-control">                            
+                        </div>
+                        <div class="form-label">
+                            <input type="number" id="quantity" placeholder="Product quantity" class="form-control">
+                        </div>
+                        <div class="form-label">
+                            <!--by default input fields doesn't accept decimals, so that we have to add a property call step,
+                            step defines the amount of decimals according to  a value,
+                            for instance, step =0.002, the accepted value will start since that step
+                            -->
+                            <input type="number" id="price" step="0.01" placeholder="Product unit price" class="form-control">   
+                        </div>
+                        <div class="form-label">
+                            <!--Related to dates we can define a default value (year) as well as minimum and maximum values
+                            This avoids issues with fake values:
+                            min="1950"
+                            max="2024"
+                            value="2023"
+                            -->
+                            <input type="text" id="description" min="2021" placeholder="Product description" class="form-control">   
+                        </div>
+                        <!--Type will define an event in the DOM; 
+                            so that you can capture the property submit in order to execute an action
+                        -->
+                        <button type="submit" class="btn btn-primary col-12">Add product</button>
+                    </form>
+                </div>
+            </div>
+
+            <!--Showcase DIV-->
+            <div id="productContainer" class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Your list of products</h5>
+                    </div>
+                    <div id="productList" class="card-body text-center">
+                        Your products will be inserted here<br>
+                    </div>
+                </div>
+            </div>
+        </div >
+    </div>
+
+    <!--Description-->
+    <div class="container pt-5">
+        <div class="card text-center ">
+            <div class="card-header">
+                <p>With this E-commerce product list application you can create a list of products, verify the total price of your purchase as well as to delete the items from it</p>
+            </div>
+            <div class="card-body">
+                <h6>Developer: </h6>
+                <p>Johan Lasso</p>
+                <h6>Technologies used:</h6>
+                <p5>Front-end: JavaScript, HTML, Bootstrap<br></p5>
+                <p5>Back-end: JavaScript</p5>
+            </div>
+        </div>
+    </div>
+    <!--JavaScript functional documents
+    the reason I put this script here it's because JavaScript compiles from top to bottom
+    so that, if you put this script in the head it will show an error during the execution
+    because, DIVS are declared after the script-->
+    <script src="Functions.js"></script>
+</body>
+</html>
