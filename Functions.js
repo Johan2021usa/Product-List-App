@@ -16,32 +16,42 @@ class Product{
     }
 }
 
-/**
- * This calls will be in chage of comunicate with the DOM, 
- * so that it will put all items in the div that receives all products
- */
 class UserInterface{
     /**
-     * When an user click on a button, the DOM is interacting with JavaScript; 
-     * so that those events are part of the DOM,
-     * to capture events we have to do the next:
-     * receive an object and then we can show than inside a div or modify the object
-     * and then show it; at the end of the process we can show a message according
-     * the result.
-     */
+    * With DOM we are able to create, modifying, delete tags from an HTML document
+    * for isntance, if we want to create a div that contains forms we can do it using the
+    * UserInterface class, all process related ti affect the  document (view) has to be done here
+    */
+
 
     addProduct(product){
-        console.log(product);
-        
+ 
         let productList = document.querySelector('#productList');
         /**
-         * This new element is creted in order to create a div that contains the products
+         * With DOM we are able to create, modifying, delete tags from an HTML document
          * then this element will be placed inside the productList (showcase);
          */
-        //const objectContainer = document.createElement('div');
-        let object;
 
+        //const objectContainer = document.createElement('div');
         //objectContainer.innerHTML = `
+        //    <div id="card-product" class="card-body border border-top-0">
+        //        <strong>Name</strong>: ${product.name}
+        //        <strong>Quantity</strong>: ${product.quantity}
+        //        <strong>Price</strong>: ${product.price}
+        //        <strong>Description</strong>: ${product.description}
+        //        <button name="delete" class="btn btn-outline-danger btn-sm">Delete</button>
+        //        <br>
+        //    </div>    
+        //`;
+        //productList.appendChild(objectContainer);
+
+        let object;
+        /**
+         * We can create tags using two ways:
+         * writing manually the tag with its properties or 
+         * using the createElement, className,
+         * for this case we will create a DIV tag manually
+         */
         object =`
             <div id="card-product" class="card-body border border-top-0">
                 <strong>Name</strong>: ${product.name}
@@ -52,10 +62,12 @@ class UserInterface{
                 <br>
             </div>    
         `;
-        //productList.appendChild(objectContainer);
         productList.innerHTML+=object;
     }
 
+    /**
+     * 
+     */
     deleteProduct(objectObtained){
         switch(objectObtained.name){
             case "delete" : 
@@ -63,25 +75,78 @@ class UserInterface{
         }
     }
 
-    //Functional events
-
-    /* This event is interesting because 
+    /**
+    * This event is interesting because 
     * we don't have to add an empty space to each field,
     * in the other hhand we will capture an event to restart the complet DIV
     */
-
     cleanFields(){
         document.querySelector('#productForm').reset();
     }
+    
+    /**
+     * If we want to show a message in the screen that appears each time we do an action such as: create or delete
+     * and we don't want to use an alert; we can insert a div using the DOM,
+     * this allows us to modify its feature, shape, etc
+     * this is a better option to offer a better user experience
+     */
+    showMessage(message, classProperty){
+        
+        const messageDiv = document.createElement('div');
+        
+        /**
+         * To concatenate a class to a div, it's important to use the ${} at the end of the command line, 
+         * which is done to become variable an attribute
+         * mt = margin top, it provides an empty space over the element
+         */
+        messageDiv.className = `alert alert-${classProperty} mt-3 text-md-center`;
 
-    showMessage(){
+        /**
+         * We have to use appendChild to add an element inside a div
+         * in this case we are adding a text inside the Div,
+         * to do so, we have to use the command document. createTextNode
+         */
+        messageDiv.appendChild(document.createTextNode(message));
 
+        /**
+         * This DIV of the HTML will receive the previos DIV that we created using the DOM
+         * in this case we are selecting it using its id
+         */
+        const contDiv = document.querySelector('#divParent');
+        /**
+         * A good practice to add elements inside a tag is using the command
+         * appendChild, in this case is child because is an internal property or object.
+         */
+        contDiv.appendChild(messageDiv);
+
+        /**
+         * Until this point the screen will show a message painted in green,
+         * however, each time we add a product a message will be added, so that,
+         * we have to create a method for this DIV desapears automatically,
+         * we can do it using setTimeOut();
+         * we can select an element from de DOM using the Class property, for this case: alert,
+         * then we can remove this element with .remove(),
+         * last but not least, we can define the time for this element to be removed,
+         * 1000= 1 sec.
+         * 2000 = 2 sec.
+         */
+        setTimeout(
+            function(){
+                document.querySelector('.alert').remove();
+            }, 1000
+        );
     }
 }
 
 //Document events
+/**
+ * Any action done by user in the DOM can be captured as an event,
+ * for that we have to use diifferent methods such as:
+ * addEventLister
+ * 
+ */
 
-//Add product event
+//Add product capture event
 document.getElementById('productForm')
     /*
      * Event listener captures any event in tag called "productForm"; 
@@ -89,26 +154,32 @@ document.getElementById('productForm')
      * there are other options different than submit such as click, reset, etc.
      * 
      */
-    .addEventListener('submit', function (objectObtained) {
-        const name = document.getElementById('name').value;
-        const quantity = document.getElementById('quantity').value;
-        const price = document.getElementById('price').value;
-        const description = document.getElementById('description').value;
-        
-        //this is the way for us to create a new object in regard to the class Prodcut.
-        const product = new Product(name, quantity, price, description);
-        const myInterface = new UserInterface();
-        myInterface.addProduct(product);
-        myInterface.cleanFields();
+    .addEventListener('submit', 
+        function (objectObtained) {
+            const name = document.getElementById('name').value;
+            const quantity = document.getElementById('quantity').value;
+            const price = document.getElementById('price').value;
+            const description = document.getElementById('description').value;
+            
+            //this is the way for us to create a new object in regard to the class Prodcut.
+            const product = new Product(name, quantity, price, description);
+            const myInterface = new UserInterface();
+            myInterface.addProduct(product);
+            myInterface.cleanFields();
 
-        /* preventDefault command avoids the page to be refreshed; otherwise, 
-        * you won't be able to debug your code... console.log() for instance
-        * you could delete it and look at the console to proof the error.
-        */
-        objectObtained.preventDefault();
-    });
+            let message = 'Product added successfully';
+            let cssProperty = 'success';
+            myInterface.showMessage(message,cssProperty);
 
-//Delete product event
+            /* preventDefault command avoids the page to be refreshed; otherwise, 
+            * you won't be able to debug your code... console.log() for instance
+            * you could delete it and look at the console to proof the error.
+            */
+            objectObtained.preventDefault();
+        }
+    );
+
+//Delete product capture event
 document.getElementById('productList')
 /*
 * This event listener will capture the "click" event inside a diff "product list",
@@ -117,13 +188,18 @@ document.getElementById('productList')
 */
     .addEventListener('click', function(objectObtained){
         const myInterface = new UserInterface();
-        /**
+
+        /*
          * The target method gets the element's features we click, it will be any element from the DOM;
-         * for instance, as we want to delete a product, when we click on the delete button,
+         * for instance, whether we want to delete a product, when we click on the delete button,
          * we have to obtain an object which contains the name=delete;
          * tha was the reason we put that property to the delete button,
          * now we have to send the target to the User interface who is in charge of modify the interface.
          */
         myInterface.deleteProduct(objectObtained.target);
-        //console.log(objectObtained.target);
+
+        let message = 'Product deleted successfully';
+        let cssProperty = 'danger';
+        myInterface.showMessage(message,cssProperty);
+        
     });
