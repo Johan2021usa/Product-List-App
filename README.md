@@ -4,7 +4,7 @@ With this E-commerce product list application you can create a list of products,
 Application features:
 - Static application developed using HTML, JavaScript and Bootstrap.
 - Objected oriented programming with JavaScript.
-- date first version commited: 15-01-2023
+- Date first version committed: 15-01-2023
 - developer: Johan Lasso (Colombia)
 - contact: lassojairo@gmail.com
 

@@ -87,6 +87,7 @@
 
             <!--Showcase DIV-->
             <div id="productContainer" class="col-md-8">
+
                 <div class="card">
                     <div class="card-header">
                         <h5>Your Products list</h5>
@@ -94,13 +95,21 @@
                     <div id="productList" class="card-body text-center">
                         Your products will be inserted here<br>
                     </div>
+                    <div id="productTotal" class="card-footer text-center"> 
+                        <button name="calculateTotal" class="btn btn-secondary">Calculate total</button>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <strong class="text-center">total</strong>
+                    <div id="showTotal" hidden="hidden" class="card-body">
+                    </div>
                 </div>
             </div>
         </div >
     </div>
 
     <!--Description-->
-    <div class="container pt-5">
+    <div class="container mt-3">
         <div class="card text-center ">
             <div class="card-header">
                 <p>With this E-commerce product list application you can create a list of products, verify the total price of your purchase as well as to delete the items from it</p>

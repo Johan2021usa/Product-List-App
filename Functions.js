@@ -8,11 +8,12 @@
 */
 class Product{
     //This is the proper way to delcare a constructor
-    constructor(name,quantity,price,description){
+    constructor(name,quantity,price,description,total){
         this.name=name;
         this.quantity=quantity;
         this.price=price;
         this.description=description;
+        this.total=total;
     }
 }
 
@@ -25,7 +26,6 @@ class UserInterface{
 
 
     addProduct(product){
- 
         let productList = document.querySelector('#productList');
         /**
          * With DOM we are able to create, modifying, delete tags from an HTML document
@@ -58,6 +58,8 @@ class UserInterface{
                 <strong>Quantity</strong>: ${product.quantity}
                 <strong>Price</strong>: ${product.price}
                 <strong>Description</strong>: ${product.description}
+                <strong>Unitary total</strong>:
+                <Strong class="total">${product.total}</Strong> 
                 <button name="delete" class="btn btn-outline-danger btn-sm">Delete</button>
                 <br>
             </div>    
@@ -71,7 +73,7 @@ class UserInterface{
     deleteProduct(objectObtained){
         switch(objectObtained.name){
             case "delete" : 
-            objectObtained.parentElement.remove();   
+            objectObtained.parentElement.remove();
         }
     }
 
@@ -91,7 +93,6 @@ class UserInterface{
      * this is a better option to offer a better user experience
      */
     showMessage(message, classProperty){
-        
         const messageDiv = document.createElement('div');
         
         /**
@@ -136,6 +137,21 @@ class UserInterface{
             }, 1000
         );
     }
+
+    calculateTotalAmount(unitaryTotal){
+        const showTotal = document.getElementById('showTotal');
+        showTotal.removeAttribute("hidden","hidden");
+        /**
+         * Temporary div
+         */
+        let cardTotal =`<div class="card text-center">${unitaryTotal}</div>`;
+        
+        /**
+         * Dom div
+         */
+        //unitaryTotal.parentElement.remove();
+        showTotal.innerHTML = cardTotal;
+    }
 }
 
 //Document events
@@ -160,17 +176,28 @@ document.getElementById('productForm')
             const quantity = document.getElementById('quantity').value;
             const price = document.getElementById('price').value;
             const description = document.getElementById('description').value;
-            
+            let uniqueTotal = quantity*price;
+            //console.log(uniqueTotal);
+
             //this is the way for us to create a new object in regard to the class Prodcut.
-            const product = new Product(name, quantity, price, description);
+            const product = new Product(name, quantity, price, description, uniqueTotal);
             const myInterface = new UserInterface();
-            myInterface.addProduct(product);
-            myInterface.cleanFields();
+            
+            console.log(String(name).length);       
+            if(String(name).length || String(quantity).length || String(price).length || String(description).length !== 0){                
+                myInterface.addProduct(product);
+                myInterface.cleanFields();
+                
+                let message = 'Product added successfully';
+                let cssProperty = 'success';
+                myInterface.showMessage(message,cssProperty);
+            }else{
+                let message = "A product information is required";
+                let cssProperty = 'warning';
+                myInterface.showMessage(message,cssProperty);
+            }
 
-            let message = 'Product added successfully';
-            let cssProperty = 'success';
-            myInterface.showMessage(message,cssProperty);
-
+            
             /* preventDefault command avoids the page to be refreshed; otherwise, 
             * you won't be able to debug your code... console.log() for instance
             * you could delete it and look at the console to proof the error.
@@ -179,27 +206,52 @@ document.getElementById('productForm')
         }
     );
 
+
 //Delete product capture event
-document.getElementById('productList')
+document.getElementById('productContainer')
 /*
 * This event listener will capture the "click" event inside a diff "product list",
 * for that reason is important to separate each element iside a tag or something,
 * a tag's property name or type doesn't infer with the event; what defines the event is the add listener and the user action.
 */
-    .addEventListener('click', function(objectObtained){
-        const myInterface = new UserInterface();
+    .addEventListener('click', 
+        function(objectObtained){
+            const myInterface = new UserInterface();    
+            /*
+            * The target method gets the element's features we click, it will be any element from the DOM;
+            * for instance, whether we want to delete a product, when we click on the delete button,
+            * we have to obtain an object which contains the name=delete;
+            * tha was the reason we put that property to the delete button,
+            * now we have to send the target to the User interface who is in charge of modify the interface.
+            */
+            myInterface.deleteProduct(objectObtained.target);
+            const targetVar = objectObtained.target;
+            
+            switch(targetVar.name){
+                case "delete" :
+                    let message = 'Product deleted successfully';
+                    let cssProperty = 'danger';
+                    myInterface.showMessage(message,cssProperty);
+            }    
+        }
+    );
 
-        /*
-         * The target method gets the element's features we click, it will be any element from the DOM;
-         * for instance, whether we want to delete a product, when we click on the delete button,
-         * we have to obtain an object which contains the name=delete;
-         * tha was the reason we put that property to the delete button,
-         * now we have to send the target to the User interface who is in charge of modify the interface.
-         */
-        myInterface.deleteProduct(objectObtained.target);
+//Total Amount capure event
+document.getElementById('productContainer').addEventListener('click',
+    function(totalObtained){
+        let totalAmount = document.querySelectorAll('strong.total');
+        let total=0;
+        for(unitaryAmount of totalAmount){
+            let unitary = parseInt(unitaryAmount.textContent);
+            total += unitary;
+        }
 
-        let message = 'Product deleted successfully';
-        let cssProperty = 'danger';
-        myInterface.showMessage(message,cssProperty);
-        
-    });
+        let verifyButton = totalObtained.target;
+
+        switch(verifyButton.name){
+            case "calculateTotal" :
+                let newInterface = new UserInterface;
+                newInterface.calculateTotalAmount(total);
+        }       
+    }
+);
